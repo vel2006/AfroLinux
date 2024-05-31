@@ -105,7 +105,7 @@ elif [ $1 == "add" ]; then
     echo "ERROR: Package does not exist in the Afro Linux packages"
   fi
   exit
-elif [ $1 == "update" ]; then
+elif [ "$1" == "update" ]; then
   if [ $(PackageExists) == 1 ]; then
     UpdatePackage $1
   else
