@@ -84,7 +84,7 @@ elif [ $1 == "find" ]; then
     if [ $(PackageOnSystem $1) == 1 ]; then
       if [ $(SystemPackageVersion $1) < $(PackageVersion $1) ]; then
         echo "Package exists and can be updated"
-      else [ $(SystemPackageVersion $1) == $(PackageVersion $1) ]; then
+      else
         echo "Package exists and is up to date"
       fi
     else
