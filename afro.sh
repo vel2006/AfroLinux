@@ -2,7 +2,7 @@
 PackageExists()
 {
   mkdir .existsTemp
-  git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux
+  git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .existsTemp
   versions=$(cat .existsTemp/AfroLinux/todateVersion)
   if [ $(echo $versions | grep $1) ]; then
     echo 1
@@ -18,7 +18,7 @@ SystemPackageVersion()
 PackageVersion()
 {
   mkdir .versionTemp
-  git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux
+  git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .versionTemp
   versions=$(cat .versionTemp/AfroLinux/todateVersion)
   echo $(echo $versions | grep $1 | awk '{print $2}')
   rm -Rf .versionTemp
@@ -26,7 +26,7 @@ PackageVersion()
 DownloadPackage()
 {
   mkdir .installTemp
-  git clone --single-branch --branch $1 https://github.com/vel2006/AfroLinux
+  git clone --single-branch --branch $1 https://github.com/vel2006/AfroLinux .installTemp
   mv .installTemp/$(ls) /etc/AfroLinux
   chmod +x /installTemp/$1
   echo "$1 $(PackageVersion $1)" >> /etc/AfroLinux/files
@@ -47,7 +47,7 @@ PackageOnSystem()
 UpdatePackage()
 {
   mkdir .updateTemp
-  git clone --single-branch --branch $1 https://github.com/vel2006/AfroLinux
+  git clone --single-branch --branch $1 https://github.com/vel2006/AfroLinux .updateTemp
   if [ $(PackageExists $1) == 1 ]; then
     if [ $(PackageOnSystem $1) == 1 ]; then
       if [ $(SystemPackageVersion $1) < $(PackageVersion $1) ]; then
