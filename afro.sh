@@ -27,6 +27,7 @@ DownloadPackage()
   mkdir .installTemp
   git clone --single-branch --branch $1 https://github.com/vel2006/AfroLinux
   mv .installTemp/$(ls) /etc/AfroLinux
+  chmod +x /installTemp/$1
   echo "$1 $(PackageVersion $1)" >> /etc/AfroLinux/files
   rm -Rf .installTemp
 }
