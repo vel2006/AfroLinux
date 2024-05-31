@@ -2,9 +2,17 @@
 PackageExists()
 {
   mkdir .existsTemp
+  found=0
   git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .existsTemp
-  versions=$(cat .existsTemp/todateVersion)
-  if [ $(echo $versions | grep "$1") ]; then
+  while IFS= read -r line; do
+    if [ $(echo $line | grep "$1") ]; then
+      found=1
+      break
+    else
+      continue
+    fi
+  done
+  if [ "$found" == 1 ]; then
     echo 1
   else
     echo 0
