@@ -3,7 +3,7 @@ PackageExists()
 {
   mkdir .existsTemp
   git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .existsTemp
-  versions=$(cat .existsTemp/AfroLinux/todateVersion)
+  versions=$(cat .existsTemp/todateVersion)
   if [ $(echo $versions | grep $1) ]; then
     echo 1
   else
@@ -19,7 +19,7 @@ PackageVersion()
 {
   mkdir .versionTemp
   git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .versionTemp
-  versions=$(cat .versionTemp/AfroLinux/todateVersion)
+  versions=$(cat .versionTemp/todateVersion)
   echo $(echo $versions | grep $1 | awk '{print $2}')
   rm -Rf .versionTemp
 }
@@ -28,7 +28,7 @@ DownloadPackage()
   mkdir .installTemp
   git clone --single-branch --branch $1 https://github.com/vel2006/AfroLinux .installTemp
   mv .installTemp/$(ls) /etc/AfroLinux
-  chmod +x /installTemp/$1
+  chmod +x .installTemp/$1
   echo "$1 $(PackageVersion $1)" >> /etc/AfroLinux/files
   rm -Rf .installTemp
 }
