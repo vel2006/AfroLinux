@@ -62,7 +62,7 @@ UpdatePackage()
     echo "ERROR: $1 package does not exist or not connected to internet"
   fi
 }
-if [ $1 == "--help" ]; then
+if [ "$1" == "--help" ]; then
   echo "Afro is the custom (very bad) package manager for Afro Linux"
   echo "It only works for custom scripts the dev has published on Github under the package's branch"
   echo "Format to use is this:"
