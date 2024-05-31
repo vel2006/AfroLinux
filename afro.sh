@@ -21,6 +21,7 @@ PackageVersion()
   git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux
   versions=$(cat .versionTemp/AfroLinux/todateVersion)
   echo $(echo $versions | grep $1 | awk '{print $2}')
+  rm -Rf .versionTemp
 }
 DownloadPackage()
 {
@@ -61,6 +62,7 @@ UpdatePackage()
   else
     echo "ERROR: $1 package does not exist or not connected to internet"
   fi
+  rm -Rf .updateTemp
 }
 if [ "$1" == "--help" ]; then
   echo "Afro is the custom (very bad) package manager for Afro Linux"
@@ -73,6 +75,7 @@ if [ $# != 2 ]; then
   echo "ERROR: incorrect amount of arguments, correct format: (you can only do them one at a time)"
   echo "afro <add/remove/update/version/find> <package>"
   exit
+fi
 if [ $1 == "remove" ]; then
   if [ $(PackageOnSystem $1) == 1 ]; then
     RemovePackage $2
