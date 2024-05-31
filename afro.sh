@@ -11,7 +11,7 @@ PackageExists()
     else
       continue
     fi
-  done
+  done < .existsTemp/todateVersion
   if [ "$found" == 1 ]; then
     echo 1
   else
