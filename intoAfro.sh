@@ -36,8 +36,8 @@ echo ""
 print_heading2 " Installing GRUB boot-loader "
 print_heading2 "-----------------------------"
 sleep 1
-apk add grub brub-bios grub-efi efibootmgr
-cp .temp/images/bootLoader.png /boot/grub/bootLoader.png
+apk add grub grub-bios grub-efi efibootmgr
+cp AfroLinux/bootLoader.png /boot/grub/bootLoader.png
 echo 'GRUB_DISTRIBUTOR="Afro Linux"' > /etc/default/grub
 echo 'GRUB_CMDLINE_LINUX_DEFAULT="quier splash logo.nologo"' >> /etc/default/grub
 echo 'GRUB_BACKGROUND=/boot/grub/bootLoader.png' >> /etc/default/grub
