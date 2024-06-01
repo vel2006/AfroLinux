@@ -53,6 +53,7 @@ RemovePackage()
     rm /etc/AfroLinux/cat.jpg
   else
     rm /etc/AfroLinux/$1
+    sed -i "/$1/d" /etc/AfroLinux/files
   fi
 }
 PackageOnSystem()
