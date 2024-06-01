@@ -21,7 +21,11 @@ PackageExists()
 }
 SystemPackageVersion()
 {
-  echo $(echo $(cat /etc/AfroLinux/files) | grep "$1" | awk '{print $2}')
+  if grep -q "$1" /etc/AfroLinux/files; then
+    echo $(grep -q "$1" /etc/AfroLinux/files | awk '{print $2}')
+  else
+    echo 0
+  fi
 }
 PackageVersion()
 {
