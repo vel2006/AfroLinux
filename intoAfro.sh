@@ -1,6 +1,6 @@
 #!/bin/ash
 print_heading1() {
-  prinf "${COLCYAN}%s${COLRSET}\n" "$1"
+  printf "${COLCYAN}%s${COLRSET}\n" "$1"
 }
 print_heading2() {
   printf "${COLWHITE}%s${COLORSET}\n" "$1"
