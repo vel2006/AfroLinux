@@ -5,7 +5,7 @@ PackageExists()
   found=0
   git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .existsTemp
   while IFS= read -r line; do
-    if [ "$line" == "$1") ]; then
+    if [ "$line" == "$1" ]; then
       found=1
       break
     else
