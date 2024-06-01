@@ -105,7 +105,8 @@ if [ "$1" == "--help" ]; then
 fi
 if [ $# != 2 ]; then
   echo "ERROR: incorrect amount of arguments, correct format: (you can only do them one at a time)"
-  echo "afro <add/remove/update/version/find> <package>"
+  echo "afro <add/remove/update/version/find/list> <package>"
+  echo "if using list format as follows: afro list all"
   exit
 fi
 if [ $1 == "remove" ]; then
