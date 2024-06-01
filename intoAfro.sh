@@ -14,7 +14,6 @@ print_heading2 "---------------------------------"
 sleep 1
 apk update
 apk upgrade
-apk add git
 apk add iproute2
 apk add net-tools
 apk add python3
