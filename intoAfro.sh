@@ -29,8 +29,9 @@ apk add gimp
 apk add claws-mail
 apk add xdg-utils
 mkdir .temp
-cp .temp/solo.png /usr/share/backgrounds/sfce
-cp .temp/textOnly.png /usr/share/backgrounds/sfce
+rm -Rf /usr/share/backgrounds/xfce
+cp AfroLinux/solo.png /usr/share/backgrounds/xfce
+cp AfroLinux/textOnly.png /usr/share/backgrounds/xfce
 echo ""
 print_heading2 " Installing GRUB boot-loader "
 print_heading2 "-----------------------------"
