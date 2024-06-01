@@ -5,7 +5,7 @@ PackageExists()
   found=0
   git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .existsTemp
   while IFS= read -r line; do
-    if [ "$line" == "$1" ]; then
+    if [ "$(echo $line | awk '{print $1}')" == "$1" ]; then
       found=1
       break
     else
@@ -35,18 +35,29 @@ DownloadPackage()
 {
   mkdir .installTemp
   git clone --single-branch --branch $1 https://github.com/vel2006/AfroLinux .installTemp
-  mv .installTemp/$(ls) /etc/AfroLinux
-  chmod +x .installTemp/$1
+  if [ $1 == "cat" ]; then
+    mv .installTemp/cat.sh /etc/AfroLinux
+    mv .installTemp/cat.jpg /etc/AfroLinux
+    chmod +x /etc/AfroLinux/cat.sh
+  else
+    mv .installTemp/$1 /etc/AfroLinux
+    chmod +x .installTemp/$1
+  fi
   echo "$1 $(PackageVersion $1)" >> /etc/AfroLinux/files
   rm -Rf .installTemp
 }
 RemovePackage()
 {
-  rm /etc/AfroLinux/$1
+  if [ $1 == "cat" ]; then
+    rm /etc/AfroLinux/cat.sh
+    rm /etc/AfroLinux/cat.jpg
+  else
+    rm /etc/AfroLinux/$1
+  fi
 }
 PackageOnSystem()
 {
-  if [ $(cat /etc/AfroLinux/files | grep "$1") ]; then
+  if grep -q "$1" /etc/AfroLinux/files; then
     echo 1
   else
     echo 0
@@ -72,11 +83,19 @@ UpdatePackage()
   fi
   rm -Rf .updateTemp
 }
+AllPackages()
+{
+  mkdir .allTemp
+  git clone --single-branch --branch versions https://github.com/vel2006/AfroLinux .allTemp
+  cat .allTemp/todateVersion
+  rm -Rf .allTemp
+}
 if [ "$1" == "--help" ]; then
   echo "Afro is the custom (very bad) package manager for Afro Linux"
   echo "It only works for custom scripts the dev has published on Github under the package's branch"
   echo "Format to use is this:"
-  echo "afro <add/remove/update/version/find> <package>"
+  echo "afro <add/remove/update/version/find/list> <package>"
+  echo "if using 'list' have 'all' as second argment ex: afro list all"
   exit
 fi
 if [ $# != 2 ]; then
@@ -129,6 +148,9 @@ elif [ $1 == "version" ]; then
   else
     echo "ERROR: Package not installed"
   fi
+  exit
+elif [ $1 == "list" ]; then
+  AllPackages
   exit
 else
   echo "ERROR: Incorrect arguments"
