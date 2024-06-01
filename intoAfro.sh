@@ -30,8 +30,8 @@ apk add gimp
 apk add claws-mail
 apk add xdg-utils
 mkdir .temp
-cp .temp/images/solo.png /usr/share/backgrounds/sfce
-cp .temp/images/textOnly.png /usr/share/backgrounds/sfce
+cp .temp/solo.png /usr/share/backgrounds/sfce
+cp .temp/textOnly.png /usr/share/backgrounds/sfce
 echo ""
 print_heading2 " Installing GRUB boot-loader "
 print_heading2 "-----------------------------"
