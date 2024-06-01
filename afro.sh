@@ -104,15 +104,15 @@ if [ $# != 2 ]; then
   exit
 fi
 if [ $1 == "remove" ]; then
-  if [ $(PackageOnSystem $1) == 1 ]; then
+  if [ $(PackageOnSystem $2) == 1 ]; then
     RemovePackage $2
   else
     echo "ERROR: Package not installed"
   fi
 elif [ $1 == "find" ]; then
-  if [ $(PackageExists) == 1 ]; then
-    if [ $(PackageOnSystem $1) == 1 ]; then
-      if [ $(SystemPackageVersion $1) < $(PackageVersion $1) ]; then
+  if [ $(PackageExists $2) == 1 ]; then
+    if [ $(PackageOnSystem $2) == 1 ]; then
+      if [ $(SystemPackageVersion $2) < $(PackageVersion $2) ]; then
         echo "Package exists and can be updated"
       else
         echo "Package exists and is up to date"
@@ -125,26 +125,26 @@ elif [ $1 == "find" ]; then
   fi
   exit
 elif [ $1 == "add" ]; then
-  if [ $(PackageExists) == 1 ]; then
-    if [ $(PackageOnSystem $1) == 1 ]; then
+  if [ $(PackageExists $2) == 1 ]; then
+    if [ $(PackageOnSystem $2) == 1 ]; then
       echo "ERROR: Package already installed"
     else
-      DownloadPackage $1
+      DownloadPackage $2
     fi
   else
     echo "ERROR: Package does not exist in the Afro Linux packages"
   fi
   exit
 elif [ "$1" == "update" ]; then
-  if [ $(PackageExists) == 1 ]; then
-    UpdatePackage $1
+  if [ $(PackageExists $2) == 1 ]; then
+    UpdatePackage $2
   else
     echo "ERROR: Package does not exist in the Afro Linux packages"
   fi
   exit
 elif [ $1 == "version" ]; then
-  if [ $(PackageOnExists $1) ]; then
-    echo "$1 version: $(SystemPackageVersion $1)"
+  if [ $(PackageOnExists $2) ]; then
+    echo "$1 version: $(SystemPackageVersion $2)"
   else
     echo "ERROR: Package not installed"
   fi
