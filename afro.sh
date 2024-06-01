@@ -145,7 +145,7 @@ elif [ "$1" == "update" ]; then
   exit
 elif [ $1 == "version" ]; then
   if [ $(SystemPackageVersion $2) != 0 ]; then
-    echo "$1 version: $(SystemPackageVersion $2)"
+    echo "$2 version: $(SystemPackageVersion $2)"
   else
     echo "ERROR: Package not installed"
   fi
