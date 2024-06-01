@@ -50,7 +50,7 @@ print_heading2 " Installing afro.sh for Afro Linux "
 print_heading2 "-----------------------------------"
 sleep 1
 mkdir .temp
-git clone --single-branch afro https://github.com/vel2006/AfroLinux
+git clone --single-branch --branch afro https://github.com/vel2006/AfroLinux
 chmod +x .temp/afro.sh
 mkdir /etc/AfroLinux
 cp .temp/afro.sh /etc/AfroLinux/
