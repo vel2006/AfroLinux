@@ -26,7 +26,7 @@ def save_installed_packages(packages):
         json.dump(packages, f, indent=4)
 
 
-#install package
+#installs packages
 def install_package(package_name):
     try:
         subprocess.check_call(["apt", "install", package_name])
@@ -36,7 +36,7 @@ def install_package(package_name):
     return True
 
 
-#ches if packages exissts
+#checks if packages exists
 def package_exists(package_name):
     try:
         subprocess.check_call(["apt", "show", package_name])
