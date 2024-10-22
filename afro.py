@@ -12,11 +12,46 @@ MISC_HEAD = "[*] MISC: "
 INPT_HEAD = "[>] INPT: "
 
 #Method for getting values inbetween certain strings / chars
-def GetInbetween(text_in, start_point, end_point):
+def GetInbetween(text_in: str, start_point: str, end_point: str):
 	start_index = text_in.find(start_point)
 	end_index = text_in.find(end_point, start_index + len(start_point))
 	if start_index != -1 and end_index != -1:
 		return text_in[start_index + len(start_point):end_index]
+
+#Method for downloading / getting a web-pages content (that doesnt enforce HTTPv2 rules)
+def GetPageContent(site_page: str, content_or_data: bool):
+	request = requests.get(site_page)
+	match request.status_code:
+		case 404:
+			print(f"{ERRR_HEAD}Page \'{site_page}\' has returned a 404 error.\n{INFO_HEAD}Try again later.")
+			exit()
+		case 1015:
+			print(f"{ERRR_HEAD}Page \'{site_page}\' has returned a 1015 error.\n{INFO_HEAD}You are likely being rate-limited due to lots of usage, try again in three hours.")
+			exit()
+		case 403:
+			print(f"{ERRR_HEAD}Page \'{site_page}\' has returned a 403 error.\n{INFO_HEAD}You are likely being denied access, or are being re-routed.")
+			exit()
+		case 200:
+			if content_or_data:
+				return request.text
+			return request.content
+
+#Method for downloading a package onto this system
+def DownloadPackage(package_name: str, package_version: int, input_device_packages: dict):
+	page_response = GetPageContent(f"https://vel2006.github.io/AfroLinux/{package_name}.xz", False)
+	with open(".temp", 'wb') as temp_file:
+		temp_file.write(page_response)
+		temp_file.close()
+	with lzma.open(".temp", 'rb') as in_file:
+		with open(f"/etc/AfroLinux/{sys.argv[2]}", 'wb') as out_file:
+			shutil.copyfileobj(in_file, out_file)
+			out_file.close()
+		in_file.close()
+	os.remove(".temp")
+	device_packages[package_name] = package_version
+	with open('/etc/AfroLinux/packages.json', 'w') as file:
+		json.dump(input_device_packages, file, indent=4)
+		file.close()
 
 #Checking the script arguments and acting as needed
 match len(sys.argv):
@@ -43,10 +78,7 @@ match len(sys.argv):
 			print(f"{ERRR_HEAD}The argument \'{sys.argv[1]}\' is not recognized.\n{INFO_HEAD}Use \'--help\' for assistance.")
 			exit()
 		#Getting a page request to where the information for the packages is held
-		response_from_page = requests.get("https://vel2006.github.io/AfroLinux/allPackages.html")
-		if response_from_page.status_code != 200:
-			print(f"{ERRR_HEAD}Page for holding the packages is down.\n{INFO_HEAD}Check the github rebo\'s version branch and try again later.")
-			exit()
+		response_from_page = GetPageContent("https://vel2006.github.io/AfroLinux/allPackages.html", True)
 		#Extracting the packages from the page
 		packages = {}
 		for line in GetInbetween(response_from_page.text, "<body>", "</body>").splitlines():
@@ -56,27 +88,21 @@ match len(sys.argv):
 		if sys.argv[2] not in packages:
 			print(f"{ERRR_HEAD}Unknown package \'{sys.argv[2]}\'.\n{INFO_HEAD}Use \'list all\' for all packages.")
 			exit()
+		package_version = packages[{sys.argv[2]}]
 		#Getting the packages on current device
 		device_packages = None
-		with open("file.json", 'r') as file:
+		with open("/etc/AfroLinux/packages.json", 'r') as file:
 			device_packages = json.load(file)
 			file.close()
 		#Acting acording to the first argument
 		match sys.argv[1]:
+			#Adding a packages
 			case "add":
 				if sys.argv[2] in device_packages:
 					print(f"{ERRR_HEAD}Package {sys.argv[2]} already installed.\n{INFO_HEAD}For updating use \'update\' not \'add\'.")
 					exit()
-				#Getting the packge and decompressing it
-				page_response = requests.get(f"https://vel2006.github.io/AfroLinux/{sys.argv[2]}.xz")
-				with open(".temp", 'wb') as temp_file:
-					temp_file.write(page_response.content)
-					temp_file.close()
-				with lzma.open(".temp", 'rb') as in_file:
-					with open(f"/atc/AfroLinux/{sys.argv[2]}", 'wb') as out_file:
-						shutil.copyfileobj(in_file, out_file)
-						out_file.close()
-					in_file.close()
-				os.remove(".temp")
+				#Getting the packge added to this system
+				DownloadPackage({sys.argv[2]}, package_version, device_packages)
+				print(f"{INFO_HEAD}Package \'{sys.argv[2]}\' was downloaded.")
 	case _:
 		print(f"{ERRR_HEAD}Unknown amount of arguments.\n{INFO_HEAD}Use \'--help\' for assistance.")
