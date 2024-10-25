@@ -1,5 +1,5 @@
 # AfroLinux
-Hello user, Afro linux is basically an expantion for Alpine Linux Standard version 3.20 x86_64. The base disk size is ~40GB and will need a minimum of 4BG of ram to use (still smaller than windows on all fronts >:3). All information I have documentated about it is below under the title of that section.
+Hello user, Afro linux is basically an expantion for Alpine Linux Standard version 3.20 x86_64. The base disk size is ~40GB and will need a minimum of 4GB of ram to use (still smaller than windows on all fronts >:3). All information I have documentated about it is below under the title of that section.
 
 ## Installation
 To get Afro Linux, you need to have standard Alpine Linux version 3.20 for x84_64 on a bootable drive. Once booted into Alpine Linux, simply follow the prompts when using the command 'setup-alpine', then reboot and remove the drive, then use 'setup-desktop xfce' and reboot when done. Finnaly, log into the root account (or account with perms) and use the following commands: 'apk add git' 'git clone https://github.com/vel2006/AfroLinux' 'chmod +x AfroLinux/intoAfro.sh' './AfroLinux/intoAfro.sh'
