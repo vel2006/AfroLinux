@@ -11,6 +11,12 @@ INFO_HEAD = "[i] INFO: "
 MISC_HEAD = "[*] MISC: "
 INPT_HEAD = "[>] INPT: "
 
+#Basic static things for this script
+afro_packages = ('afro', 'cat', 'main')
+main_page = "https://vel2006.github.io/AfroLinux/allPackages.html"
+options = ("add", "remove", "update", "version", "find", "list")
+packages_file = "/etc/AfroLinux/packages.json"
+
 #Method for getting values inbetween certain strings / chars
 def GetInbetween(text_in: str, start_point: str, end_point: str):
 	start_index = text_in.find(start_point)
@@ -64,7 +70,7 @@ match len(sys.argv):
 		match sys.argv[1]:
 			case "--help":
 				print(f"{INFO_HEAD}Afro is the custom (and very bad) package manager for Afro Linux.\n{INFO_HEAD}It only works for custom scripts the devs have published on Github under the 'versions' branch for Afro Linux.")
-				print(f"{INFO_HEAD}Format to use is this:\n{INFO_HEAD}\tafro <add/remove/update/version/find/list> <package>\n{INFO_HEAD}if using 'list' have 'all' as second argment ex: afro list all")
+				print(f"{INFO_HEAD}Format to use is this:\n{INFO_HEAD}\tafro <add/remove/update/version/find/list> <package>\n{INFO_HEAD}\'list\' options:\n{INFO_HEAD}\t<all/afro>")
 				exit()
 			case "add" | "remove" | "update" | "version" | "find" | "list":
 				print(f"{ERRR_HEAD}The argument \'{sys.argv[1]}\' requires a package as third argument.\n{INFO_HEAD}Use \'--help\' for assistance.")
@@ -74,11 +80,11 @@ match len(sys.argv):
 				exit()
 	case 3:
 		#Checking to make sure that the first argument is valid
-		if sys.argv[1] not in ("add", "remove", "update", "version", "find", "list"):
+		if sys.argv[1] not in options:
 			print(f"{ERRR_HEAD}The argument \'{sys.argv[1]}\' is not recognized.\n{INFO_HEAD}Use \'--help\' for assistance.")
 			exit()
 		#Getting a page request to where the information for the packages is held
-		response_from_page = GetPageContent("https://vel2006.github.io/AfroLinux/allPackages.html", True)
+		response_from_page = GetPageContent(main_page, True)
 		#Extracting the packages from the page
 		packages = {}
 		for line in GetInbetween(response_from_page.text, "<body>", "</body>").splitlines():
@@ -91,7 +97,7 @@ match len(sys.argv):
 		package_version = packages[{sys.argv[2]}]
 		#Getting the packages on current device
 		device_packages = None
-		with open("/etc/AfroLinux/packages.json", 'r') as file:
+		with open(packages_file, 'r') as file:
 			device_packages = json.load(file)
 			file.close()
 		#Acting acording to the first argument
@@ -104,5 +110,23 @@ match len(sys.argv):
 				#Getting the packge added to this system
 				DownloadPackage({sys.argv[2]}, package_version, device_packages)
 				print(f"{INFO_HEAD}Package \'{sys.argv[2]}\' was downloaded.")
+			#Listing all packages of given type
+			case "list":
+				match sys.argv[2]:
+					case "all":
+						print("All Avalable Packages / Tools:")
+						for package in packages:
+							print(f"{package}: {packages[package]}")
+						exit()
+					case "afro":
+						print("Afro Custom Packages:")
+						for package in afro_packages:
+							try:
+								print(f"{package}: {packages[package]}")
+							except:
+								print(f"{ERRR_HEAD}Package: {package} is no longer found or supported.")
+					case _:
+						print(f"{ERRR_HEAD}Package type \'{sys.argv[2]}\' was not found.\n{INFO_HEAD}Use \'--help\' for assistance.")
+						exit()
 	case _:
 		print(f"{ERRR_HEAD}Unknown amount of arguments.\n{INFO_HEAD}Use \'--help\' for assistance.")
