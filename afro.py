@@ -59,6 +59,21 @@ def DownloadPackage(package_name: str, package_version: int, input_device_packag
 		json.dump(input_device_packages, file, indent=4)
 		file.close()
 
+def RemovePackage(package_name: str, input_device_packages: dict):
+    try:
+        os.remove(f"/etc/AfroLinux/{package_name}")
+    except FileNotFoundError:
+        print(f"{ERRR_HEAD}Package '{package_name}' not found.")
+        return
+
+    
+    del input_device_packages[package_name]
+    with open('/etc/AfroLinux/packages.json', 'w') as file:
+        json.dump(input_device_packages, file, indent=4)
+        file.close()
+
+    print(f"{INFO_HEAD}Package '{package_name}' removed successfully.")
+	
 #Checking the script arguments and acting as needed
 match len(sys.argv):
 	case 1:
@@ -128,5 +143,13 @@ match len(sys.argv):
 					case _:
 						print(f"{ERRR_HEAD}Package type \'{sys.argv[2]}\' was not found.\n{INFO_HEAD}Use \'--help\' for assistance.")
 						exit()
+			case "remove":
+				if sys.argv[2] in device_packages:
+					RemovePackage({sys.argv[2]}, device_packages)
+					print(f"{INFO_HEAD}Package \'{sys.argv[2]}\' was removed.")
+				else:
+					print(f"{ERRR_HEAD}Package \'{sys.argv[2]}\' is not installed.")
+					exit()
+				
 	case _:
 		print(f"{ERRR_HEAD}Unknown amount of arguments.\n{INFO_HEAD}Use \'--help\' for assistance.")
