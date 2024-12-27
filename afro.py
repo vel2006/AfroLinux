@@ -12,7 +12,6 @@ MISC_HEAD = "[*] MISC: "
 INPT_HEAD = "[>] INPT: "
 
 #Basic static things for this script
-afro_packages = ('afro', 'cat', 'main')
 main_page = "https://vel2006.github.io/AfroLinux/allPackages.html"
 options = ("add", "remove", "update", "version", "find", "list")
 packages_file = "/etc/AfroLinux/packages.json"
