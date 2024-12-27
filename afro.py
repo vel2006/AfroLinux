@@ -109,7 +109,7 @@ match len(sys.argv):
 		if sys.argv[2] not in packages and sys.argv[2] != "all":
 			print(f"{ERRR_HEAD}Unknown package \'{sys.argv[2]}\'.\n{INFO_HEAD}Use \'list all\' for all packages.")
 			exit()
-		if sys.argv[2] != "all":
+		if sys.argv[2] != "all" and sys.argv[2] != "afro":
 			package_version = packages[{sys.argv[2]}]
 		#Getting the packages on current device
 		device_packages = None
@@ -135,12 +135,9 @@ match len(sys.argv):
 							print(f"{package}: {packages[package]}")
 						exit()
 					case "afro":
-						print("Afro Custom Packages:")
-						for package in afro_packages:
-							try:
-								print(f"{package}: {packages[package]}")
-							except:
-								print(f"{ERRR_HEAD}Package: {package} is no longer found or supported.")
+						print("Installed Afro Packages:")
+						for package in device_packages:
+							print(f"{package}: {device_packages[package]}")
 					case _:
 						print(f"{ERRR_HEAD}Package type \'{sys.argv[2]}\' was not found.\n{INFO_HEAD}Use \'--help\' for assistance.")
 						exit()
