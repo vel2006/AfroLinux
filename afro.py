@@ -147,5 +147,16 @@ match len(sys.argv):
 				else:
 					print(f"{ERRR_HEAD}Package \'{sys.argv[2]}\' is not installed.")
 					exit()
+			case "update":
+				if sys.argv[2] not in device_packages:
+					print(f"{ERRR_HEAD}Package \'{sys.argv[2]}\' is not installed.\n{INFO_HEAD}For instlling packages use \'add\' not \'update\'")
+					exit()
+				print(f"{INFO_HEAD}Removing package \'{sys.argv[2]}\' for re-instalation...")
+				RemovePackage(sys.argv[2], device_packages)
+				print(f"{INFO_HEAD}Package \'{sys.argv[2]}\' was removed.")
+				print(f"{INFO_HEAD}Installing package \'{sys.argv[2]}\'...")
+				DownloadPackage(sys.argv[2], package_version, device_packages)
+				print(f"{INFO_HEAD}Package \'{sys.argv[2]}\' was updated!")
+				exit()
 	case _:
 		print(f"{ERRR_HEAD}Unknown amount of arguments.\n{INFO_HEAD}Use \'--help\' for assistance.")
