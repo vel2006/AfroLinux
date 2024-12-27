@@ -106,10 +106,11 @@ match len(sys.argv):
 			if "<p>" in line:
 				packages[GetInbetween(line, "<p>", "=")] = GetInbetween(line, "=", "</p>")
 		#Checking to see if the package requested is even inside of the page's contents
-		if sys.argv[2] not in packages:
+		if sys.argv[2] not in packages and sys.argv[2] != "all":
 			print(f"{ERRR_HEAD}Unknown package \'{sys.argv[2]}\'.\n{INFO_HEAD}Use \'list all\' for all packages.")
 			exit()
-		package_version = packages[{sys.argv[2]}]
+		if sys.argv[2] != "all":
+			package_version = packages[{sys.argv[2]}]
 		#Getting the packages on current device
 		device_packages = None
 		with open(packages_file, 'r') as file:
@@ -150,6 +151,5 @@ match len(sys.argv):
 				else:
 					print(f"{ERRR_HEAD}Package \'{sys.argv[2]}\' is not installed.")
 					exit()
-				
 	case _:
 		print(f"{ERRR_HEAD}Unknown amount of arguments.\n{INFO_HEAD}Use \'--help\' for assistance.")
